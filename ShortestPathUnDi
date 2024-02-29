@@ -1,0 +1,75 @@
+#include <iostream>
+#include <queue>
+
+#include "Graphes/UndirectedGraph.h"
+
+int shortestPath2(UndirectedGraph g, int startVertex, int endVertex) {
+    queue<int> q;
+    queue<int> neig;
+    queue<int> path;
+    unordered_map<int, bool> visited;
+    unordered_map<int, int> distances;
+
+    q.push(startVertex);
+    visited[startVertex] = true;
+    distances[startVertex] = 0;
+
+    while (!q.empty()) {
+        int curr = q.front();
+        path.push(curr);
+        q.pop();
+        
+
+        if (curr == endVertex) {
+            cout << curr << " } = ";
+            return distances[curr];
+        }
+
+        for (int val : g.getNeighbors(curr))
+        {
+            neig.push(val);
+        }
+        neig.pop();
+
+        for (int neighbor : g.getNeighbors(curr)) {
+            if (!neig.empty())
+            {
+                if (g.getWeight(curr, neig.front()) <= g.getWeight(curr, neighbor))
+                {
+                    if (!visited[neig.front()])
+                    {
+                        q.push(neig.front());
+                        visited[neig.front()] = true;
+                        distances[neig.front()] = distances[curr] + g.getWeight(curr, neig.front());
+                        neig.pop();
+
+                    }
+                }
+                else 
+                {
+                    if (!visited[neighbor]) {
+                    q.push(neighbor);
+                    visited[neighbor] = true;
+                    distances[neighbor] = distances[curr] + g.getWeight(curr, neighbor);
+                    }
+                }
+            }
+            else
+            {
+                if (!visited[neighbor]) 
+                {
+                    q.push(neighbor);
+                    visited[neighbor] = true;
+                    distances[neighbor] = distances[curr] + g.getWeight(curr, neighbor);
+                }
+
+            }
+        }
+        while (!path.empty())
+        {
+            cout << path.front() << " ";
+            path.pop();
+        }
+    }
+    return -1; // no path found
+}
