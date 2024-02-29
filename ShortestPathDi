@@ -1,0 +1,85 @@
+#include <iostream>
+#include <queue>
+#include "Graphes/queue.h"
+
+#include "Graphes/DirectedGraph.h"
+#include "Graphes/UndirectedGraph.h"
+
+//поиск в ширину
+
+int shortestPath1(DirectedGraph g, int startVertex, int endVertex) {
+        Queue<int> q;
+        Queue<int> nei;
+        Queue<int> path;
+        unordered_map<int, bool> visited; // пара ключ-значение типа int-bool
+        unordered_map<int, int> distances;
+        q.push(startVertex);
+        path.push(startVertex);
+        visited[startVertex] = true;
+        distances[startVertex] = 0;
+
+        while (!q.empty()) {
+            int curr = q.front();
+            q.pop(); // удаление из начала
+
+            if (curr == endVertex) {
+                cout <<  "} = ";
+                return distances[curr];
+            }
+            
+            for (int neighbor1 : g.getNeighbors(curr))
+            {
+                nei.push(neighbor1);
+            }
+            nei.pop();
+            
+
+            for (int neighbor : g.getNeighbors(curr)) {  //цикл проходит по всем соседям текущей вершины
+                if (!nei.empty())
+                {
+                    if (g.getWeight(curr, nei.front()) <= g.getWeight(curr, neighbor))
+                    {
+                        if (!visited[nei.front()])
+                        {
+                        q.push(nei.front());
+                        path.push(nei.front());
+                        visited[nei.front()] = true;
+                        distances[nei.front()] = distances[curr] + g.getWeight(curr, nei.front());
+                        }
+                        break;
+                    }
+                    if (g.getWeight(curr, nei.front()) > g.getWeight(curr, neighbor)) {
+                        if (!visited[neighbor]) { //соседняя не посещена -> в очередь -> посещена -> расстояние
+                            q.push(neighbor);
+                            path.push(neighbor);
+                            visited[neighbor] = true;
+                            distances[neighbor] = distances[curr] + g.getWeight(curr, neighbor);
+                        }
+                        break;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                if (nei.empty())
+                {
+                    if (!visited[neighbor]){
+                        q.push(neighbor);
+                        path.push(neighbor);
+                        visited[neighbor] = true;
+                        distances[neighbor] = distances[curr] + g.getWeight(curr, neighbor);
+                    }
+                    break;
+                }
+            }
+            while (!path.empty())
+            {
+                cout << path.front() << " ";
+                path.pop();
+            }
+        }
+        return -1; // no path found
+    }
+
+
+
