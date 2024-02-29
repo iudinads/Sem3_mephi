@@ -1,0 +1,47 @@
+#include <iostream>
+#include "Tests.cpp"
+
+using namespace std;
+
+
+int main()
+{
+    int command = 1;
+    cout << "Start" << endl;
+
+    while (command != 0){
+        cout << "Algorithms: " << endl;
+        cout << "1 - find the shortest paths in a directed graph" << endl;
+        cout << "2 - find the shortest paths in an undirected graph" << endl;
+        cout << "Structures: " << endl;
+        cout << "3 - directed graph" << endl;
+        cout << "4 - undirected graph" << endl;
+        cout << "End: " << endl;
+        cout << "0 - exit" <<endl;
+    
+        int command_1;
+        cin >> command_1;
+        int n;
+
+        switch(command_1){
+            case 1:
+                PathDi();
+                break;
+            case 2:
+                PathUnDi();
+                break;
+            case 3:
+                StructDi();
+                break;
+            case 4: 
+                StructUnDi();
+                break;
+            case 0:
+                command = 0;
+                break;
+            default:
+                cout << "wrong input :(, try again:" << endl;
+        }
+    }
+    return 0;
+}
